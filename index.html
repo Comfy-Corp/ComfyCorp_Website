@@ -15,18 +15,21 @@
 		<link href="css/sb-admin.css" rel="stylesheet">
 		<script src="js/jquery-1.11.0.js"></script>
 				<!-- Scripts for loading shits -->
-<script>
-var json
-										$.ajax({
-											url: '/cgi-bin/api.php',
-											dataType: 'json',
-											success: function(response) {
-										json = response;
-										populateSavedStreams(document.getElementById('streamselect'), json.streams);
-										populateSavedAlarms(document.getElementById('alarmselect'), json.alarms);
-										}
-										})
-										</script>
+		<script>
+		function getJsonFile (){
+			var json
+			$.ajax({
+				url: '/cgi-bin/api.php',
+				dataType: 'json',
+				success: function(response) {
+			json = response;
+			populateSavedStreams(document.getElementById('streamselect'), json.streams);
+			populateSavedAlarms(document.getElementById('alarmselect'), json.alarms);
+			}
+			})}
+			getJsonFile();
+			setInterval(getJsonFile,300000000000); //Please edit this! <----- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		</script>
 		<script type="text/javascript" src="js/moment.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
