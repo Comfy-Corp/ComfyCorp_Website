@@ -19,7 +19,7 @@
 		function getJsonFile (){
 			var json
 			$.ajax({
-				url: '/cgi-bin/api.php',
+				url: 'http://radio.reupload.nl/cgi-bin/api.php',
 				dataType: 'json',
 				success: function(response) {
 			json = response;
@@ -28,7 +28,7 @@
 			}
 			})}
 			getJsonFile();
-			setInterval(getJsonFile,300000000000); //Please edit this! <----- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//setInterval(getJsonFile,30000000); //Please edit this! <----- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		</script>
 		<script type="text/javascript" src="js/moment.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -396,19 +396,6 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<i class="fa fa-list fa-fw"></i> Select Stream
-								<div class="pull-right">
-									<div class="control-group">
-										<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-										Edit List
-										<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu pull-right" role="menu">
-											<li>
-												<a href="#">Edit</a>
-											</li>
-										</ul>
-									</div>
-								</div>
 							</div>
 							<!-- /.panel-heading -->
 							<div class="panel-body">
@@ -422,7 +409,7 @@
 										<script>function populateSavedStreams(select, data) {
 										var items = [];
 										$.each(data, function (id, option) {
-										items.push('<option>' + option.name + '</option>');
+										items.push('<option alt="' + option.url +'">' + option.name + '</option>');
 										});
 										select.innerHTML= items.join('');
 										}
@@ -509,7 +496,7 @@
 									<script>function populateSavedAlarms(select, data) {
 										var items = [];
 										$.each(data, function (id, option) {
-										items.push('<a href="#" class="list-group-item"><i class="fa fa-bell fa-fw"></i>' + option.id + '<span class="pull-right text-muted small"><em>' + option.tijd + '</em></span></a>');
+										items.push('<a href="#" class="list-group-item"><i class="fa fa-bell fa-fw"></i> ' + option.desc + '</br><span class="text-muted small"><em>' + option.time + '</em></span></a>');
 										});
 										select.innerHTML= items.join('');
 										}
