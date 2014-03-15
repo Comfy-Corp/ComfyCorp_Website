@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Start Bootstrap - SB Admin Version 2.0 Demo</title>
+        <title>Comfy Corp - Radio Login</title>
         <!-- Core CSS - Include with every page -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -39,29 +39,73 @@
                                         <a onclick="logincheck()" class="btn btn-block btn-social btn-login">
                                         <i class="fa fa-check"></i> Login Radio
                                         </a>
-                                        <a class="btn btn-block btn-social btn-dropbox">
+                                        <a data-target="#myModal" data-toggle="modal" class="btn btn-block btn-social btn-dropbox">
                                         <i class="fa fa-link"></i> Register Radio
                                         </a>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title" id="myModalLabel">Register Radio</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <div class="form-group">
+                                                                <label>Radio ID</label>
+                                                                <input id="regID" class="form-control" placeholder="Enter ID">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Radio Name</label>
+                                                                <input id="regName" class="form-control" placeholder="Enter Name">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="col-lg-4 pull-right">
+                                                            <a onclick="register()" class="pull-right btn btn-block btn-social btn-dropbox">
+                                                            <i class="fa fa-link"></i> Register
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </fieldset>
                                 </form>
                                 <script>
                                 function logincheck(){
                                 var json
+                                var json2
                                 var radioNaam = document.getElementById('nameRadio').value;
+                                var d = new Date();
+                                d.setTime(d.getTime()+(14*24*60*60*1000));
+                                var expires = "expires="+d.toGMTString();
                                 bootstrap_alert = function() {}
                                 bootstrap_alert.warning = function(message) {
                                 $('#alert_placeholder').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>')
                                 }
                                 $.ajax({
-                                url: 'http://radio.reupload.nl/cgi-bin/api.php?q=validate&name=' + radioNaam,
+                                url: '/cgi-bin/api.php?q=validate&name=' + radioNaam,
                                 dataType: 'json',
                                 success: function(response) {
                                 json = response;
                                 if (json.result == "name " + radioNaam + " is valid")
                                 {
+                                $.ajax({
+                                url: '/cgi-bin/api.php?q=getid&name=' + radioNaam,
+                                dataType: 'json',
+                                success: function(response) {
+                                json2 = response;
+                                var id = json2.result.split('to id ');
+                                console.log(id[0] + " en " + id[1]);
+                                document.cookie="radioID=" + id[1] + ";"+ expires;
+                                document.cookie="radioName=" + radioNaam + ";" + expires;
                                 window.location = 'index.html';
-                                document.cookie="radioName=" + radioNaam;
                                 console.log(document.cookie);
+                                }
+                                })
                                 return;
                                 }
                                 else (json.result == "name " + radioNaam + " is invalid")
@@ -70,7 +114,33 @@
                                 return;
                                 }
                                 }
-                                })}
+                                }
+                                )}
+                                function register(){
+                                var radioRegID = document.getElementById('regID').value;
+                                var radioRegNaam = document.getElementById('regName').value;
+                                console.log("Im in register");
+                                var d = new Date();
+                                d.setTime(d.getTime()+(14*24*60*60*1000));
+                                var expires = "expires="+d.toGMTString();
+                                $.ajax({
+                                url: '/cgi-bin/register.php?q=setname&name=' + radioRegNaam + '&id=' + radioRegID,
+                                dataType: 'json',
+                                success: function(response) {
+                                json = response;
+                                console.log(json);
+                                if (json.result == 'ID ' + radioRegID + ' linked to ' + radioRegNaam)
+                                {
+                                $('#myModal').modal('hide');
+                                document.cookie="radioID=" + radioRegID + ";"+ expires;
+                                document.cookie="radioName=" + radioRegNaam + ";" + expires;
+                                window.location = 'index.html';
+                                console.log(document.cookie);
+                                return;
+                                }
+                                }
+                                }
+                                )}
                                 
                                 </script>
                             </div>

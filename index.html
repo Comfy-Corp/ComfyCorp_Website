@@ -9,24 +9,73 @@
 		<link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 		<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 		<!-- Page-Level Plugin CSS - Dashboard -->
-		<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
 		<link href="css/plugins/timeline/timeline.css" rel="stylesheet">
 		<!-- SB Admin CSS - Include with every page -->
 		<link href="css/sb-admin.css" rel="stylesheet">
+		<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="ionicons/css/ionicons.css">
 		<script src="js/jquery-1.11.0.js"></script>
-				<!-- Scripts for loading shits -->
+		<!-- Scripts for loading shits -->
 		<script>
+		function startstream()
+		{
+			console.log(dbocument.getElementById(streamselect));
+		}
+		function saveStream()
+		{
+			var newStreamName = document.getElementById('newStreamName').value;
+			var newStreamURL = document.getElementById('newStreamURL').value;
+			var newStreamRadioID = getCookie("radioID");
+			$.ajax({
+		url: '/cgi-bin/api.php?q=addstream&name=' + newStreamName + '&url=' + newStreamURL + '&id=' + newStreamRadioID,
+		dataType: 'json',
+		success: function(response) {
+		json = response;
+		$('#myModal').modal('hide');
+		getJsonFile();
+		populateSavedStreams(document.getElementById('streamselect'), json.streams);
+		}
+		}
+		)
+		}
+		function getCookie(cname)
+		{
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++)
+		{
+		var c = ca[i].trim();
+		if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+		}
+		return "";
+		}
+		</script>
+		<script>
+		function checkCookie()
+		{
+		var user=getCookie("radioName");
+		if (user!="")
+		{
+			return;
+		}
+		else
+		{
+			window.location = 'login.html';
+		}
+		}
 		function getJsonFile (){
 			var json
 			$.ajax({
-				url: 'http://radio.reupload.nl/cgi-bin/api.php',
+				url: '/cgi-bin/api.php',
 				dataType: 'json',
 				success: function(response) {
 			json = response;
 			populateSavedStreams(document.getElementById('streamselect'), json.streams);
 			populateSavedAlarms(document.getElementById('alarmselect'), json.alarms);
+			populateHeader(document.getElementById('header'));
 			}
 			})}
+			checkCookie();
 			getJsonFile();
 			//setInterval(getJsonFile,30000000); //Please edit this! <----- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		</script>
@@ -47,211 +96,32 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="index.html">Comfy Radio</a>
+					<a id="brandID" class="navbar-brand" href="index.html">Comfy Radio</a>
 				</div>
 				<!-- /.navbar-header -->
 				<ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
-						</a>
-						<ul class="dropdown-menu dropdown-messages">
-							<li>
-								<a href="#">
-								<div>
-									<strong>John Smith</strong>
-									<span class="pull-right text-muted">
-									<em>Yesterday</em>
-									</span>
-								</div>
-								<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<strong>John Smith</strong>
-									<span class="pull-right text-muted">
-									<em>Yesterday</em>
-									</span>
-								</div>
-								<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<strong>John Smith</strong>
-									<span class="pull-right text-muted">
-									<em>Yesterday</em>
-									</span>
-								</div>
-								<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a class="text-center" href="#">
-								<strong>Read All Messages</strong>
-								<i class="fa fa-angle-right"></i>
-								</a>
-							</li>
-						</ul>
-						<!-- /.dropdown-messages -->
-					</li>
-					<!-- /.dropdown -->
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
-						</a>
-						<ul class="dropdown-menu dropdown-tasks">
-							<li>
-								<a href="#">
-								<div>
-									<p>
-									<strong>Task 1</strong>
-									<span class="pull-right text-muted">40% Complete</span>
-									</p>
-									<div class="progress progress-striped active">
-										<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-											<span class="sr-only">40% Complete (success)</span>
-										</div>
-									</div>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<p>
-									<strong>Task 2</strong>
-									<span class="pull-right text-muted">20% Complete</span>
-									</p>
-									<div class="progress progress-striped active">
-										<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-											<span class="sr-only">20% Complete</span>
-										</div>
-									</div>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<p>
-									<strong>Task 3</strong>
-									<span class="pull-right text-muted">60% Complete</span>
-									</p>
-									<div class="progress progress-striped active">
-										<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-											<span class="sr-only">60% Complete (warning)</span>
-										</div>
-									</div>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<p>
-									<strong>Task 4</strong>
-									<span class="pull-right text-muted">80% Complete</span>
-									</p>
-									<div class="progress progress-striped active">
-										<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-											<span class="sr-only">80% Complete (danger)</span>
-										</div>
-									</div>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a class="text-center" href="#">
-								<strong>See All Tasks</strong>
-								<i class="fa fa-angle-right"></i>
-								</a>
-							</li>
-						</ul>
+						<p class="dropdown-toggle" data-toggle="dropdown" id="theTimer">00:00:00</p>
+						<script type="text/javascript">
+						<!--
+						window.setTimeout("updateTime()", 0);// start immediately
+						window.setInterval("updateTime()", 1000);// update every second
+						function updateTime() {
+						document.getElementById("theTimer").firstChild.nodeValue =
+						new Date().toTimeString().substring(0, 8);
+						}
+						//-->
+						</script>
 						<!-- /.dropdown-tasks -->
 					</li>
-					<!-- /.dropdown -->
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
-						</a>
-						<ul class="dropdown-menu dropdown-alerts">
-							<li>
-								<a href="#">
-								<div>
-									<i class="fa fa-comment fa-fw"></i> New Comment
-									<span class="pull-right text-muted small">4 minutes ago</span>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<i class="fa fa-twitter fa-fw"></i> 3 New Followers
-									<span class="pull-right text-muted small">12 minutes ago</span>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<i class="fa fa-envelope fa-fw"></i> Message Sent
-									<span class="pull-right text-muted small">4 minutes ago</span>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<i class="fa fa-tasks fa-fw"></i> New Task
-									<span class="pull-right text-muted small">4 minutes ago</span>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-								<div>
-									<i class="fa fa-upload fa-fw"></i> Server Rebooted
-									<span class="pull-right text-muted small">4 minutes ago</span>
-								</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a class="text-center" href="#">
-								<strong>See All Alerts</strong>
-								<i class="fa fa-angle-right"></i>
-								</a>
-							</li>
-						</ul>
-						<!-- /.dropdown-alerts -->
-					</li>
-					<!-- /.dropdown -->
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+						<img width= 14px height= 14px; src="pics/radio.png"></i>  <i class="fa fa-caret-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-user">
-							<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-							</li>
-							<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-							</li>
-							<li class="divider"></li>
 							<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+							</li>
+							<li><a href="#"><i class="fa fa-info fa-fw"></i> About</a>
 							</li>
 						</ul>
 						<!-- /.dropdown-user -->
@@ -266,98 +136,12 @@
 					<ul class="nav" id="side-menu">
 						<li class="sidebar-search">
 							<div class="input-group custom-search-form">
-								<input type="text" class="form-control" placeholder="Search...">
-								<span class="input-group-btn">
-								<button class="btn btn-default" type="button">
-								<i class="fa fa-search"></i>
-								</button>
-								</span>
+								<img src="/pics/logo.png"></img>
 							</div>
 							<!-- /input-group -->
 						</li>
 						<li>
-							<a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<li>
-									<a href="flot.html">Flot Charts</a>
-								</li>
-								<li>
-									<a href="morris.html">Morris.js Charts</a>
-								</li>
-							</ul>
-							<!-- /.nav-second-level -->
-						</li>
-						<li>
-							<a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
-						</li>
-						<li>
-							<a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<li>
-									<a href="panels-wells.html">Panels and Wells</a>
-								</li>
-								<li>
-									<a href="buttons.html">Buttons</a>
-								</li>
-								<li>
-									<a href="notifications.html">Notifications</a>
-								</li>
-								<li>
-									<a href="typography.html">Typography</a>
-								</li>
-								<li>
-									<a href="grid.html">Grid</a>
-								</li>
-							</ul>
-							<!-- /.nav-second-level -->
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<li>
-									<a href="#">Second Level Item</a>
-								</li>
-								<li>
-									<a href="#">Second Level Item</a>
-								</li>
-								<li>
-									<a href="#">Third Level <span class="fa arrow"></span></a>
-									<ul class="nav nav-third-level">
-										<li>
-											<a href="#">Third Level Item</a>
-										</li>
-										<li>
-											<a href="#">Third Level Item</a>
-										</li>
-										<li>
-											<a href="#">Third Level Item</a>
-										</li>
-										<li>
-											<a href="#">Third Level Item</a>
-										</li>
-									</ul>
-									<!-- /.nav-third-level -->
-								</li>
-							</ul>
-							<!-- /.nav-second-level -->
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<li>
-									<a href="blank.html">Blank Page</a>
-								</li>
-								<li>
-									<a href="login.html">Login Page</a>
-								</li>
-							</ul>
-							<!-- /.nav-second-level -->
+							<a href="index.html"><i class="ionicons ion-speedometer"></i> Dashboard</a>
 						</li>
 					</ul>
 					<!-- /#side-menu -->
@@ -368,7 +152,13 @@
 			<div id="page-wrapper">
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">Dashboard</h1>
+						<h1 id="header" class="page-header"></h1>
+						<script>
+						function populateHeader(select)
+							{
+							select.innerHTML = "Dashboard van " + getCookie('radioName');
+						}
+						</script>
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
@@ -395,18 +185,49 @@
 						<!-- /.panel -->
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<i class="fa fa-list fa-fw"></i> Select Stream
+								<i class="fa fa-list fa-fw"></i> Streams
+								<div class="pull-right">
+									<div class="btn-group">
+										<a href="#" class="btn btn-primary btn-xs" data-target="#myModal" data-toggle="modal"><i class="fa fa-plus"></i> Add</a>
+									</div>
+									<!-- Modal -->
+									<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+													<h4 class="modal-title" id="myModalLabel">Add stream</h4>
+												</div>
+												<div class="modal-body">
+													<div class="form-group">
+														<label>Stream Name</label>
+														<input id="newStreamName" class="form-control" placeholder="Enter Name">
+													</div>
+													<div class="form-group">
+														<label>Stream URL</label>
+														<input id="newStreamURL" class="form-control" placeholder="Enter URL">
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+													<button onclick="saveStream()" type="button" class="btn btn-primary">Save</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<!-- /.panel-heading -->
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-xs-6">
-										<label>Streams</label>
+									<div class="col-lg-6">
+										<label>Start Stream</label>
 										<div class="form-group horizontal">
 											<select id="streamselect" class="form-control">
 											</select>
 										</div>
-										<script>function populateSavedStreams(select, data) {
+										<script>
+										function populateSavedStreams(select, data) {
 										var items = [];
 										$.each(data, function (id, option) {
 										items.push('<option alt="' + option.url +'">' + option.name + '</option>');
@@ -414,6 +235,34 @@
 										select.innerHTML= items.join('');
 										}
 										</script>
+										<a onclick="startstream()" class="btn btn-block btn-social btn-dropbox">
+										<i class="fa fa-check"></i> Start
+										</a>
+									</div>
+									<!-- /.col-lg-4 (nested) -->
+									<div class="col-lg-4 pull-right">
+									</div>
+									<!-- /.col-lg-8 (nested) -->
+								</div>
+								<!-- /.row -->
+							</div>
+							<!-- /.panel-body -->
+						</div>
+						<!-- /.panel -->
+						<!-- /.panel -->
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<i class="fa fa-rss-square fa-fw"></i> RSS Feed
+								<div class="pull-right">
+									<div class="btn-group">
+										
+									</div>
+								</div>
+							</div>
+							<!-- /.panel-heading -->
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
 									</div>
 									<!-- /.col-lg-4 (nested) -->
 									<div class="col-lg-12">
@@ -433,17 +282,15 @@
 								<i class="fa fa-bell fa-fw"></i> Alarm
 								<div class="pull-right">
 									<div class="btn-group">
-										<button type="button" class="btn btn-primary btn-xs" width="100" data-target="#myModal" data-toggle="modal">
-										<b>&nbsp&nbsp + &nbsp&nbsp</b>
-										</button>
+										<a href="#" class="btn btn-primary btn-xs" data-target="#addAlarm" data-toggle="modal"><i class="fa fa-plus"></i> Add</a>
 									</div>
 									<!-- Modal -->
-									<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal fade" id="addAlarm" tabindex="-1" role="dialog" aria-labelledby="addAlarmLabel" aria-hidden="true">
 										<div class="modal-dialog">
 											<div class="modal-content">
 												<div class="modal-header">
 													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-													<h4 class="modal-title" id="myModalLabel">Add Alarm</h4>
+													<h4 class="modal-title" id="addAlarmLabel">Add Alarm</h4>
 												</div>
 												<div class="modal-body">
 													<div class="container">
@@ -500,7 +347,7 @@
 										});
 										select.innerHTML= items.join('');
 										}
-										</script>
+									</script>
 								</div>
 								<!-- /.panel-body -->
 							</div>
