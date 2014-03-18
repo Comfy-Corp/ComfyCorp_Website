@@ -1,362 +1,379 @@
 <!DOCTYPE html>
+
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Comfy Radio - Dashboard</title>
-		<!-- Core CSS - Include with every page -->
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-		<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-		<!-- Page-Level Plugin CSS - Dashboard -->
-		<link href="css/plugins/timeline/timeline.css" rel="stylesheet">
-		<!-- SB Admin CSS - Include with every page -->
-		<link href="css/sb-admin.css" rel="stylesheet">
-		<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="ionicons/css/ionicons.css">
-		<script src="js/jquery-1.11.0.js"></script>
-		<!-- Scripts for loading shits -->
-		<script>
-		function startstream()
-		{
-			console.log(dbocument.getElementById(streamselect));
-		}
-		function saveStream()
-		{
-			var newStreamName = document.getElementById('newStreamName').value;
-			var newStreamURL = document.getElementById('newStreamURL').value;
-			var newStreamRadioID = getCookie("radioID");
-			$.ajax({
-		url: '/cgi-bin/api.php?q=addstream&name=' + newStreamName + '&url=' + newStreamURL + '&id=' + newStreamRadioID,
-		dataType: 'json',
-		success: function(response) {
-		json = response;
-		$('#myModal').modal('hide');
-		getJsonFile();
-		populateSavedStreams(document.getElementById('streamselect'), json.streams);
-		}
-		}
-		)
-		}
-		function getCookie(cname)
-		{
-		var name = cname + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0; i<ca.length; i++)
-		{
-		var c = ca[i].trim();
-		if (c.indexOf(name)==0) return c.substring(name.length,c.length);
-		}
-		return "";
-		}
-		</script>
-		<script>
-		function checkCookie()
-		{
-		var user=getCookie("radioName");
-		if (user!="")
-		{
-			return;
-		}
-		else
-		{
-			window.location = 'login.html';
-		}
-		}
-		function getJsonFile (){
-			var json
-			$.ajax({
-				url: '/cgi-bin/api.php',
-				dataType: 'json',
-				success: function(response) {
-			json = response;
-			populateSavedStreams(document.getElementById('streamselect'), json.streams);
-			populateSavedAlarms(document.getElementById('alarmselect'), json.alarms);
-			populateHeader(document.getElementById('header'));
-			}
-			})}
-			checkCookie();
-			getJsonFile();
-			//setInterval(getJsonFile,30000000); //Please edit this! <----- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		</script>
-		<script type="text/javascript" src="js/moment.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-		<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-		<!-- Page-Level Plugin Scripts - Dashboard -->
-		<script src="js/sb-admin.js"></script>
-	</head>
-	<body>
-		<div id="wrapper">
-			<nav class="navbar navbar-default na" role="navigation" style="margin-bottom: 0">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-					<a id="brandID" class="navbar-brand" href="index.html">Comfy Radio</a>
-				</div>
-				<!-- /.navbar-header -->
-				<ul class="nav navbar-top-links navbar-right">
-					<li class="dropdown">
-						<p class="dropdown-toggle" data-toggle="dropdown" id="theTimer">00:00:00</p>
-						<script type="text/javascript">
-						<!--
-						window.setTimeout("updateTime()", 0);// start immediately
-						window.setInterval("updateTime()", 1000);// update every second
-						function updateTime() {
-						document.getElementById("theTimer").firstChild.nodeValue =
-						new Date().toTimeString().substring(0, 8);
-						}
-						//-->
-						</script>
-						<!-- /.dropdown-tasks -->
-					</li>
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<img width= 14px height= 14px; src="pics/radio.png"></i>  <i class="fa fa-caret-down"></i>
-						</a>
-						<ul class="dropdown-menu dropdown-user">
-							<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-							</li>
-							<li><a href="#"><i class="fa fa-info fa-fw"></i> About</a>
-							</li>
-						</ul>
-						<!-- /.dropdown-user -->
-					</li>
-					<!-- /.dropdown -->
-				</ul>
-				<!-- /.navbar-top-links -->
-			</nav>
-			<!-- /.navbar-static-top -->
-			<nav class="navbar-default navbar-static-side" role="navigation">
-				<div class="sidebar-collapse">
-					<ul class="nav" id="side-menu">
-						<li class="sidebar-search">
-							<div class="input-group custom-search-form">
-								<img src="/pics/logo.png"></img>
-							</div>
-							<!-- /input-group -->
-						</li>
-						<li>
-							<a href="index.html"><i class="ionicons ion-speedometer"></i> Dashboard</a>
-						</li>
-					</ul>
-					<!-- /#side-menu -->
-				</div>
-				<!-- /.sidebar-collapse -->
-			</nav>
-			<!-- /.navbar-static-side -->
-			<div id="page-wrapper">
-				<div class="row">
-					<div class="col-lg-12">
-						<h1 id="header" class="page-header"></h1>
-						<script>
-						function populateHeader(select)
-							{
-							select.innerHTML = "Dashboard van " + getCookie('radioName');
-						}
-						</script>
-					</div>
-					<!-- /.col-lg-12 -->
-				</div>
-				<!-- /.row -->
-				<div class="row">
-					<div class="col-lg-8">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<i class="fa fa-music fa-fw"></i> Current Stream
-							</div>
-							<!-- /.panel-heading -->
-							<div class="panel-body">
-								<div class="timeline-panel">
-									<div class="timeline-heading">
-										<h4 class="timeline-title">Now playing: Sagat [Street fighter]</h4>
-										<p>
-										<small class="text-muted"><i class="fa fa-time"></i>192.168.1.142:8000  </small>
-										</p>
-									</div>
-								</div>
-							</div>
-							<!-- /.panel-body -->
-						</div>
-						<!-- /.panel -->
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<i class="fa fa-list fa-fw"></i> Streams
-								<div class="pull-right">
-									<div class="btn-group">
-										<a href="#" class="btn btn-primary btn-xs" data-target="#myModal" data-toggle="modal"><i class="fa fa-plus"></i> Add</a>
-									</div>
-									<!-- Modal -->
-									<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-										<div class="modal-dialog">
-											<div class="modal-content">
-												<div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-													<h4 class="modal-title" id="myModalLabel">Add stream</h4>
-												</div>
-												<div class="modal-body">
-													<div class="form-group">
-														<label>Stream Name</label>
-														<input id="newStreamName" class="form-control" placeholder="Enter Name">
-													</div>
-													<div class="form-group">
-														<label>Stream URL</label>
-														<input id="newStreamURL" class="form-control" placeholder="Enter URL">
-													</div>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-													<button onclick="saveStream()" type="button" class="btn btn-primary">Save</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /.panel-heading -->
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-lg-6">
-										<label>Start Stream</label>
-										<div class="form-group horizontal">
-											<select id="streamselect" class="form-control">
-											</select>
-										</div>
-										<script>
-										function populateSavedStreams(select, data) {
-										var items = [];
-										$.each(data, function (id, option) {
-										items.push('<option alt="' + option.url +'">' + option.name + '</option>');
-										});
-										select.innerHTML= items.join('');
-										}
-										</script>
-										<a onclick="startstream()" class="btn btn-block btn-social btn-dropbox">
-										<i class="fa fa-check"></i> Start
-										</a>
-									</div>
-									<!-- /.col-lg-4 (nested) -->
-									<div class="col-lg-4 pull-right">
-									</div>
-									<!-- /.col-lg-8 (nested) -->
-								</div>
-								<!-- /.row -->
-							</div>
-							<!-- /.panel-body -->
-						</div>
-						<!-- /.panel -->
-						<!-- /.panel -->
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<i class="fa fa-rss-square fa-fw"></i> RSS Feed
-								<div class="pull-right">
-									<div class="btn-group">
-										
-									</div>
-								</div>
-							</div>
-							<!-- /.panel-heading -->
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-xs-6">
-									</div>
-									<!-- /.col-lg-4 (nested) -->
-									<div class="col-lg-12">
-									</div>
-									<!-- /.col-lg-8 (nested) -->
-								</div>
-								<!-- /.row -->
-							</div>
-							<!-- /.panel-body -->
-						</div>
-						<!-- /.panel -->
-					</div>
-					<!-- /.col-lg-8 -->
-					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<i class="fa fa-bell fa-fw"></i> Alarm
-								<div class="pull-right">
-									<div class="btn-group">
-										<a href="#" class="btn btn-primary btn-xs" data-target="#addAlarm" data-toggle="modal"><i class="fa fa-plus"></i> Add</a>
-									</div>
-									<!-- Modal -->
-									<div class="modal fade" id="addAlarm" tabindex="-1" role="dialog" aria-labelledby="addAlarmLabel" aria-hidden="true">
-										<div class="modal-dialog">
-											<div class="modal-content">
-												<div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-													<h4 class="modal-title" id="addAlarmLabel">Add Alarm</h4>
-												</div>
-												<div class="modal-body">
-													<div class="container">
-														<div class="col-lg-4">
-															<div class='well'>
-																<div class="form-group">
-																	<div class='input-group date' id='datetimepicker1'>
-																		<input type='text' class="form-control" />
-																		<span class="input-group-addon"><span class="fa fa-clock-o"></span>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Comfy Radio | Dashboard</title>
+    <!-- Core CSS - Include with every page -->
+    <link rel="shortcut icon" href="pics/favicon_0.ico" type="image/vnd.microsoft.icon">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/plugins/timeline/timeline.min.css" rel="stylesheet">
+    <link href="css/sb-admin.min.css" rel="stylesheet">
+    <link href="css/plugins/social-buttons/social-buttons.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"><!-- Scripts for loading shits -->
+    <!--//setInterval(getJsonFile,30000000); //Please edit this! <===== !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+    <script src="js/jquery-1.11.0.js"></script>
+    <script src="js/comfycorp.min.js"></script>
+    <script src="js/moment.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script><!-- Page-Level Plugin Scripts - Dashboard -->
+
+    <script src="js/sb-admin.js"></script>
+</head>
+
+<body onload="load()">
+    <div id="wrapper">
+        <nav class="navbar navbar-default na" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-target=".sidebar-collapse"
+                data-toggle="collapse" type="button"><span class=
+                "sr-only">Toggle navigation</span></button> <a class=
+                "navbar-brand" href="index.html" id="brandID">Comfy Radio</a>
+            </div><!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <p class="dropdown-toggle" data-toggle="dropdown" id=
+                    "theTimer">00:00:00</p><script type="text/javascript">
+<!--
+                        window.setTimeout("updateTime()", 0);// start immediately
+                        window.setInterval("updateTime()", 1000);// update every second
+                        function updateTime() {
+                        document.getElementById("theTimer").firstChild.nodeValue =
+                        new Date().toTimeString().substring(0, 8);
+                        }
+                        //-->
+                    </script> <!-- /.dropdown-tasks -->
+                </li>
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=
+                    "#"><img height="14px;" src="pics/radio.png" width=
+                    "14px"> <i class="fa fa-caret-down"></i></a>
+
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="login.html" onclick="deletecookie()"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+
+                        <li style="list-style: none; display: inline">
+                        </li>
+
+                        <li><a data-target="#about" data-toggle="modal" href=
+                        "#"><i class="fa fa-info fa-fw"></i> About</a></li>
+                    </ul><!-- Modal -->
+
+                    <div class="modal fade" id="about" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button class="close" data-dismiss="modal"
+                                    type="button">×</button>
+
+                                    <h4 class="modal-title" id="addAlarmLabel">
+                                    About</h4>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="col-lg-4">
+                                            <center><h1>The Comfy Hero!</h1></br><img src="/pics/hero.png"></center>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-default"
+                                    data-dismiss="modal" type=
+                                    "button">Close</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                    <!-- /.dropdown-user -->
+                </li><!-- /.dropdown -->
+            </ul><!-- /.navbar-top-links -->
+        </nav><!-- /.navbar-static-top -->
+
+        <nav class="navbar-default navbar-static-side">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form"><img src=
+                        "/pics/logo.png"></div><!-- /input-group -->
+                    </li>
+
+                    <li><a href="index.html"><i class="ionicons ion-speedometer"> Dashboard</i></a></li>
+                </ul><!-- /#side-menu -->
+            </div><!-- /.sidebar-collapse -->
+        </nav><!-- /.navbar-static-side -->
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header" id="header"></h1><script>
+        function populateHeader(select)
+                            {
+                            select.innerHTML = "Dashboard van " + getCookie('radioName');
+                        }
+                    </script>
+                </div><!-- /.col-lg-12 -->
+            </div><!-- /.row -->
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                           <i class="fa fa-music fa-fw"></i> Current Stream
+                        </div><!-- /.panel-heading -->
+
+                        <div class="panel-body">
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Now playing:
+                                    UNDERCONSTRUCTION</h4>
+
+                                    <p><small class=
+                                    "text-muted"><i class="fa fa-time"></i>192.168.1.142:8000</small></p>
+                                </div>
+                            </div>
+                        </div><!-- /.panel-body -->
+                    </div><!-- /.panel -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-list fa-fw"></i> Streams
+
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-xs"
+                                    data-target="#myModal" data-toggle="modal"
+                                    href="#"><i class="fa fa-plus"></i> Add</a>
+                                </div><!-- Modal -->
+
+                                <div class="modal fade" id="myModal" tabindex=
+                                "-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button class="close"
+                                                data-dismiss="modal" type=
+                                                "button">×</button>
+
+                                                <h4 class="modal-title" id=
+                                                "myModalLabel">Add stream</h4>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label>Stream Name</label>
+                                                    <input class="form-control"
+                                                    id="newStreamName"
+                                                    placeholder="Enter Name">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Stream IP</label>
+                                                    <input class="form-control"
+                                                    id="newStreamURL"
+                                                    placeholder="Enter IP">
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default"
+                                                data-dismiss="modal" type=
+                                                "button">Close</button>
+                                                <button class="btn btn-primary"
+                                                onclick="saveStream()" type=
+                                                "button">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.panel-heading -->
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <label>Start Stream</label>
+
+                                    <div class="form-group horizontal">
+                                        <select class="form-control" id="streamselect">
+                                            
+                                        </select>
+                                        </div><script>
+function populateSavedStreams(select, data) {
+                                        var items = [];
+                                        $.each(data, function (id, option) {
+                                        items.push('<option alt="' + option.url +'">' + option.name + '<\/option>');
+                                        });
+                                        select.innerHTML= items.join('');
+                                        }
+                                        </script> <a class=
+                                        "btn btn-block btn-social btn-dropbox"
+                                        onclick="startstream()"><i class="fa fa-check"></i> Start</a>
+                                        <div id="alert_placeholder">
+                                    </div><!-- /.col-lg-4 (nested) -->
+
+                                    <div class="col-xs-6 pull-right"></div>
+                                </div><!-- /.col-lg-8 (nested) -->
+                            </div><!-- /.row -->
+                        </div><!-- /.panel-body -->
+                    </div><!-- /.panel -->
+                    <!-- /.panel -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                           <i class="fa fa-rss-square fa-fw"></i> RSS Feed
+
+                            <div class="pull-right">
+                                <div class="btn-group"></div>
+                            </div>
+                        </div><!-- /.panel-heading -->
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-6"></div>
+                                <!-- /.col-lg-4 (nested) -->
+
+                                <div class="col-lg-12"></div>
+                                <!-- /.col-lg-8 (nested) -->
+                            </div><!-- /.row -->
+                        </div><!-- /.panel-body -->
+                    </div><!-- /.panel -->
+                </div><!-- /.col-lg-8 -->
+
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i> Alarm
+
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-xs"
+                                    data-target="#addAlarm" onclick="getJsonF"i data-toggle="modal"
+                                    href="#"><i class="fa fa-plus"></i> Add</a>
+                                </div><!-- Modal -->
+
+                                <div class="modal fade" id="addAlarm" tabindex=
+                                "-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button class="close"
+                                                data-dismiss="modal" type=
+                                                "button">×</button>
+
+                                                <h4 class="modal-title" id=
+                                                "addAlarmLabel">Add Alarm</h4>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="container">
+                                                    <div class="col-lg-4">
+                                                        <div class='well'>
+                                                            <div class=
+                                                            "form-group">
+                                                            <label>Select Time of Alarm</label>
+                                                                <div class=
+                                                                'input-group date'
+                                                                id=
+                                                                'datetimepicker1'>
+                                                                <input placeholder="Time" class="form-control"
+                                                                    type=
+                                                                    'text'>
+                                                                <span class="input-group-addon"><span class="fa fa-clock-o"></span>
+																</span>
+                                                                </div><br>
+                                                                <label>Select Date of Alarm</label>
+                                                                <div class=
+                                                                'input-group date'
+                                                                id=
+                                                                'datetimepicker2'>
+                                                                <input placeholder="Date" class="form-control"
+                                                                    data-format="DD-MM-YYYY"
+                                                                    type=
+                                                                    'text'>
+                                                                    <span class="input-group-addon"><span class="fa fa-calendar"></span>
 																		</span>
-																	</div>
-																	<br>
-																	<div class='input-group date' id='datetimepicker2'>
-																		<input type='text' class="form-control" data-format="DD-MM-YYYY"/>
-																		<span class="input-group-addon"><span class="fa fa-calendar"></span>
-																		</span>
-																	</div>
-																</div>
-															</div>
-															<script type="text/javascript">
-															$(function () {
-															$('#datetimepicker1').datetimepicker({
-															pickDate: false
-															});
-															});
-															$(function () {
-															$('#datetimepicker2').datetimepicker({
-															pickTime: false
-															});
-															});
-															</script>
-														</div>
-													</div>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-													<button type="button" class="btn btn-primary">Save changes</button>
-												</div>
-											</div>
-											<!-- /.modal-content -->
-										</div>
-										<!-- /.modal-dialog -->
-									</div>
-									<!-- /.modal -->
-								</div>
-								<!-- /.panel-heading -->
-								<div class="panel-body">
-									<div id="alarmselect" class="list-group">
-									</div>
-									<script>function populateSavedAlarms(select, data) {
-										var items = [];
-										$.each(data, function (id, option) {
-										items.push('<a href="#" class="list-group-item"><i class="fa fa-bell fa-fw"></i> ' + option.desc + '</br><span class="text-muted small"><em>' + option.time + '</em></span></a>');
-										});
-										select.innerHTML= items.join('');
-										}
-									</script>
-								</div>
-								<!-- /.panel-body -->
-							</div>
-							<!-- /.col-lg-4 -->
-						</div>
-						<!-- /.row -->
-					</div>
-					<!-- /#page-wrapper -->
-				</div>
-				<!-- /#wrapper -->
-			</body>
-		</html>
+                                                                </div>
+                                                                </br>
+                                                                <label>Select Stream</label>
+                                                                    <select class="form-control" id="streamselect2">
+                                            
+                                                                    </select>
+                                                                </br>
+                                                                <label>Alarm Description</label>
+                                                                <input class="form-control" placeholder="Description">
+                                                                <br>
+                                                                <label>Alarm Type</label>
+                                                                <div class="radio">
+                                                                    <label>
+                                                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked>Type 1
+                                                                    </label>
+                                                                </div>
+                                                                <div class="radio">
+                                                                    <label>
+                                                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="2">Type 2
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div><script type=
+                                                        "text/javascript">
+    $(function () {
+                                                            $('#datetimepicker1').datetimepicker({
+                                                            format: 'HH:mm',
+                                                            pickDate: false,
+                                                            pickSeconds: false,
+                                                            pick12HourFormat: false  
+                                                            });
+                                                            });
+                                                            $(function () {
+                                                            $('#datetimepicker2').datetimepicker({
+                                                            pickTime: false
+                                                            });
+                                                            });
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default"
+                                                data-dismiss="modal" type=
+                                                "button">Close</button>
+                                                <button class="btn btn-primary"
+                                                type="button">Save
+                                                changes</button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            </div><!-- /.panel-heading -->
+
+                            <div class="panel-body">
+                                <div class="list-group" id="alarmselect">
+                                </div><script>
+        function populateSavedAlarms(select, data) {
+                                        var items = [];
+                                        $.each(data, function (id, option) {
+                                        items.push('<a href="#" class="list-group-item"><i class="fa fa-bell fa-fw"><\/i> ' + option.desc + '<\/br><span class="text-muted small"><em>' + option.time + '<\/em><\/span><\/a>');
+                                        });
+                                        select.innerHTML= items.join('');
+                                        }
+                                </script>
+                            </div><!-- /.panel-body -->
+                        </div><!-- /.col-lg-4 -->
+                    </div><!-- /.row -->
+                </div><!-- /#page-wrapper -->
+            </div><!-- /#wrapper -->
+        </div>
+    </div>
+</body>
+</html>

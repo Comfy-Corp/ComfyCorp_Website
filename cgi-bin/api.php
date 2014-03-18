@@ -213,6 +213,25 @@ else
                     echo "{\"error\":\"Invalid parameters\"}";
                 break;
 
+
+            case genconfig:
+                if ($_GET['name'] != "")
+                {
+                    $query = "SELECT * FROM streams43 WHERE NAME='".$_GET['name']."'";
+                    $result = mysqli_query($con, $query);
+                    $str = mysqli_fetch_array($result);
+                    //var_dump($str);
+                    $handle = fopen("../settings", "w+");
+                    $data = "Type:STREAMREQ\nStreamAddr:".$str['URL']."\n\n";
+                    fwrite($handle, $data);
+                    fclose($handle);
+                    echo "{\"result\":\"success\"}";
+                    break;
+                }
+                else
+                    echo "{\"error\":\"Invalid parameters\"}";
+                break;
+
             
 
             default:

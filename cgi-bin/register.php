@@ -11,7 +11,7 @@ else
 {
 	if ($_GET['q'] === "setname")
 	{
-		$data = file_get_contents('http://radio.reupload.nl/cgi-bin/api.php?q=checkid&id='.$_GET['id']);
+		$data = file_get_contents('http://vps.reupload.nl/cgi-bin/api.php?q=checkid&id='.$_GET['id']);
 		if ($data === "1")
 		{
 			$query = "UPDATE radios SET NAME='".$_GET['name']."' WHERE ID=".$_GET['id'];
