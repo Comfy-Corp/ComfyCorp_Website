@@ -183,17 +183,8 @@ else
                 $handle = fopen("../settings", "r");
                 $data = fread($handle, filesize("../settings"));
                 fclose($handle);
-                // preg_replace( "/\r|\n/", "", $data);
-                $str = explode("StreamAddr:", $data);
-                var_dump($str);
-                
-                $query = "SELECT * FROM streams43 WHERE URL='".$str[1]."'";
-                $result = mysqli_query($con, $query);
-                $strs = mysqli_fetch_array($result);
-                echo $result;
-                var_dump($strs);
-                echo $strs['NAME'];
-                //echo split(":", $data)[1];
+                echo $data;
+                echo split(":", $data)[1];
                 break;
 
             case 'getid':
@@ -253,15 +244,12 @@ else
                     }
                     else
                        echo "{\"error\":\"Invalid ID\"}"; 
-				}
-                else
-                    echo "{\"error\":\"Invalid parameters\"}";
-                break;     
+				}     
 
             case genconfig:
                 if ($_GET['name'] != "")
                 {
-                    $query = "SELECT * FROM streams43 WHERE ID='".$_GET['name']."'";
+                    $query = "SELECT * FROM streams43 WHERE NAME='".$_GET['name']."'";
                     $result = mysqli_query($con, $query);
                     $str = mysqli_fetch_array($result);
                     //var_dump($str);
@@ -276,22 +264,13 @@ else
                     echo "{\"error\":\"Invalid parameters\"}";
                 break;
 
-            case genconfigstop:
-                    $handle = fopen("../settings", "w+");
-                    $data = "Type:STREAMREQ\nStreamAddr:STOP\n\n";
-                    fwrite($handle, $data);
-                    fclose($handle);
-                    echo "{\"result\":\"success\"}";
-                    break;
-                break;
-
 	    case getstreamurl:
 		if ($_GET['id'] != "")
 		{
 		    $query = "SELECT * FROM streams43 WHERE ID=".$_GET['id'];
                     $result = mysqli_query($con, $query);
                     $str = mysqli_fetch_array($result);
-                    echo "StreamURL:".$str['URL']."\n\n";	
+                    echo "URL:".$str['URL']."\n\n";	
 		}
 		else
 		    echo "URL:NONE";
