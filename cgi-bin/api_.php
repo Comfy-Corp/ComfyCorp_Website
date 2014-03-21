@@ -265,13 +265,36 @@ else
                 break;
 
 	    case getstreamurl:
-		if ($_GET['id'] != "")
-		{
-		    $query = "SELECT * FROM streams43 WHERE ID=".$_GET['id'];
-                    $result = mysqli_query($con, $query);
-                    $str = mysqli_fetch_array($result);
-                    echo "URL:".$str['URL']."\n\n";	
-		}
+		if ($_GET['id'] != "" && $_GET['time'] != "")
+        { 
+            $alarmQuery = "SELECT * FROM alarm";
+            $alarmResult = mysqli_query($con, $alarmQuery);
+            $clocktime = $_get['time'];
+            $clocknumber = explode(":", $clocktime);
+            $rows = array();
+            $this = array();
+            while ($row = mysqli_fetch_array($alarmResult)) 
+            {
+                $rows[] = $row;
+            }
+
+            foreach ($rows as &$value) 
+            {   
+                $numbers = explode(":", $value[1]);
+                $timenumber = $numbers[0].$numbers[1];
+                if ($timenumber > $clocknumber) 
+                {
+                    $this[] = $value;
+                }
+            }
+            sort($this);
+            echo '<pre>';
+            print_r($this);
+            // $query = "SELECT * FROM streams43 WHERE ID=".$_GET['id'];
+            // $result = mysqli_query($con, $query);
+            // $str = mysqli_fetch_array($result);
+            // echo "StreamURL:".$str['URL']."\n\n";    
+        }
 		else
 		    echo "URL:NONE";
 		break;

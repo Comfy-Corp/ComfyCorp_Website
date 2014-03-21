@@ -1,14 +1,11 @@
 function startstream() {
-    console.log("infunction");
     var newStreamName = document.getElementById('streamselect').value;
-    console.log(newStreamName);
     var newStreamRadioID = getCookie("radioID");
     $.ajax({
         url: '/cgi-bin/api.php?q=genconfig&name=' + newStreamName + '&id=' + newStreamRadioID,
         dataType: 'json',
         success: function(response) {
             json = response;
-            console.log(json)
             if (json.result == 'success') {
                 bootstrap_alert.success('Success: Stream started');
                 window.setTimeout(closealert, 5000);
@@ -21,14 +18,12 @@ function startstream() {
 }
 
 function stopstream() {
-    console.log("infunction");
     var newStreamRadioID = getCookie("radioID");
     $.ajax({
         url: '/cgi-bin/api.php?q=genconfigstop',
         dataType: 'json',
         success: function(response) {
             json = response;
-            console.log(json)
             if (json.result == 'success') {
                 bootstrap_alert.success('Success: Stream stopped');
                 window.setTimeout(closealert, 5000);
@@ -41,7 +36,6 @@ function stopstream() {
 }
 
 function deletecookie() {
-    console.log("deletecookie");
     var d = new Date();
     d.setTime(d.getTime()-(14*24*60*60*1000));
     var expires = "expires="+d.toGMTString();
@@ -62,6 +56,7 @@ function saveStream() {
         url: '/cgi-bin/api.php?q=addstream&name=' + newStreamName + '&url=' + newStreamURL + '&id=' + newStreamRadioID,
         dataType: 'json',
         success: function(response) {
+            console.log("mmmh");
             json = response;
             $('#myModal').modal('hide');
             getJsonFile();
@@ -72,23 +67,16 @@ function saveStream() {
 
 function saveAlarm() {
     var newAlarmStream = document.getElementById('streamselect2').value;
-    console.log(newAlarmStream);
     var newAlarmType;
     var newAlarmTime;
     	newAlarmType = 0;
     	newAlarmTime = document.getElementById('timeAlarm').value;
-	console.log(newAlarmType);
-    console.log(newAlarmTime);
     var newAlarmDesc = document.getElementById('newAlarmDesc').value;
-    console.log(newAlarmDesc);
     var newStreamRadioID = getCookie("radioID");
-    console.log(newStreamRadioID);
-    console.log('/cgi-bin/api.php?q=addalarm&id=' + newStreamRadioID + '&time=' + newAlarmTime + '&type=' + newAlarmType + '&stream=' + newAlarmStream + '&desc=' + newAlarmDesc);
     $.ajax({
         url: '/cgi-bin/api.php?q=addalarm&id=' + newStreamRadioID + '&time=' + newAlarmTime + '&type=' + newAlarmType + '&stream=' + newAlarmStream + '&desc=' + newAlarmDesc,
         dataType: 'json',
         success: function(response) {
-            console.log("komt ie hier ?");
             json = response;
             $('#addAlarm').modal('hide');
             getJsonFile();
