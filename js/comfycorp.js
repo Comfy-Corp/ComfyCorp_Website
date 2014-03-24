@@ -9,9 +9,32 @@ function startstream() {
             if (json.result == 'success') {
                 bootstrap_alert.success('Success: Stream started');
                 window.setTimeout(closealert, 5000);
+                getJsonFile();
             } else {
                 bootstrap_alert.warning('Error: Er is een fout opgetreden (Error code: 1337)');
                 window.setTimeout(closealert, 5000);
+            }
+        }
+    })
+}
+
+function getcurrent()
+{
+        var json;
+        $.ajax({
+        url: '/cgi-bin/api.php?q=getcurrent',
+        dataType: 'json',
+        success: function(response) 
+        {
+            var json = response;
+            console.log(json.result);
+            if(json.result == "")
+            {
+                $('#current_placeholder').html('<h4 class="timeline-title">No stream playing </h4>');
+            }
+            else
+            {
+                $('#current_placeholder').html('<h4 class="timeline-title">Now playing: ' + json.result + '</h4>');
             }
         }
     })
@@ -27,6 +50,7 @@ function stopstream() {
             if (json.result == 'success') {
                 bootstrap_alert.success('Success: Stream stopped');
                 window.setTimeout(closealert, 5000);
+                getJsonFile();
             } else {
                 bootstrap_alert.warning('Error: Er is een fout opgetreden (Error code: 1338)');
                 window.setTimeout(closealert, 5000);
@@ -120,6 +144,7 @@ function getJsonFile() {
             populateSavedStreams(document.getElementById('streamselect2'), json.streams);
             populateSavedAlarms(document.getElementById('alarmselect'), json.alarms);
             populateHeader(document.getElementById('header'));
+            getcurrent();
         }
     })
 }
