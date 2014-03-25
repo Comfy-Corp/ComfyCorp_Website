@@ -16,7 +16,6 @@ function load() // Called when page is loaded, will call the next files
 
 function refresh() // Called in a loop when page is loaded.
 {
-    console.log("In de refresh");
     getJsonFile();
     getcurrent();
 }
@@ -85,10 +84,10 @@ function populateSavedStreams(select, data) //Populate Streams
         {
             var json = response;
             var items = [];
-            $.each(data, function(id, option)
+            $.each(data, function(id, option) 
             { 
                 if (json.result === option.name)
-                {
+                { //Selected option if its playing
                     items.push('<option selected value="' + option.id + '" alt="' + option.url + '">' + option.name + '<\/option>');
                 }
                 else
@@ -201,7 +200,6 @@ function saveStream() //Save added Stream
         dataType: 'json',
         success: function(response)
         {
-            console.log("mmmh");
             json = response;
             $('#myModal').modal('hide');
             getJsonFile();
@@ -259,7 +257,6 @@ function register()
 {
     var radioRegID = document.getElementById('regID').value;
     var radioRegNaam = document.getElementById('regName').value;
-    console.log("Im in register");
     var d = new Date();
     d.setTime(d.getTime() + (14 * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toGMTString();
@@ -270,14 +267,12 @@ function register()
         success: function(response)
         {
             json = response;
-            console.log(json);
             if (json.result == 'ID ' + radioRegID + ' linked to ' + radioRegNaam)
             {
                 $('#myModal').modal('hide');
                 document.cookie = "radioID=" + radioRegID + ";" + expires;
                 document.cookie = "radioName=" + radioRegNaam + ";" + expires;
                 window.location = 'index.html';
-                console.log(document.cookie);
                 return;
             }
         }
@@ -315,11 +310,9 @@ function logincheck()
                     {
                         json2 = response;
                         var id = json2.result.split('to id ');
-                        console.log(id[0] + " en " + id[1]);
                         document.cookie = "radioID=" + id[1] + ";" + expires;
                         document.cookie = "radioName=" + radioNaam + ";" + expires;
                         window.location = 'index.html';
-                        console.log(document.cookie);
                     }
                 });
                 return;
