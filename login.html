@@ -27,21 +27,23 @@
                                             <input id="nameRadio" class="form-control" placeholder="Radio name" name="radioName" type="radioName" autofocus>
                                         </div>
                                         <script>
-                                        document.getElementById('nameRadio').onkeypress = function(e){
-                                        if (!e) e = window.event;
-                                        var keyCode = e.keyCode || e.which;
-                                        if (keyCode == '13'){
-                                        logincheck();
-                                        return false;
-                                        }
-                                        }
+                                            document.getElementById('nameRadio').onkeypress = function(e)
+                                            {
+                                                if (!e) e = window.event;
+                                                var keyCode = e.keyCode || e.which;
+                                                if (keyCode == '13')
+                                                {
+                                                    logincheck();
+                                                    return false;
+                                                }
+                                            }
                                         </script>
                                         <div id = "alert_placeholder"></div>
                                         <a onclick="logincheck()" class="btn btn-block btn-social btn-login">
-                                        <i class="fa fa-check"></i> Login Radio
+                                            <i class="fa fa-check"></i> Login Radio
                                         </a>
                                         <a data-target="#myModal" data-toggle="modal" class="btn btn-block btn-social btn-dropbox">
-                                        <i class="fa fa-link"></i> Register Radio
+                                            <i class="fa fa-link"></i> Register Radio
                                         </a>
                                         <!-- Modal -->
                                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -75,81 +77,13 @@
                                         </div>
                                     </fieldset>
                                 </form>
-                                <script>
-                                function logincheck(){
-                                var json
-                                var json2
-                                var radioNaam = document.getElementById('nameRadio').value;
-                                var d = new Date();
-                                d.setTime(d.getTime()+(14*24*60*60*1000));
-                                var expires = "expires="+d.toGMTString();
-                                bootstrap_alert = function() {}
-                                bootstrap_alert.warning = function(message) {
-                                $('#alert_placeholder').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>')
-                                }
-                                $.ajax({
-                                url: '/cgi-bin/api.php?q=validate&name=' + radioNaam,
-                                dataType: 'json',
-                                success: function(response) {
-                                json = response;
-                                if (json.result == "name " + radioNaam + " is valid")
-                                {
-                                $.ajax({
-                                url: '/cgi-bin/api.php?q=getid&name=' + radioNaam,
-                                dataType: 'json',
-                                success: function(response) {
-                                json2 = response;
-                                var id = json2.result.split('to id ');
-                                console.log(id[0] + " en " + id[1]);
-                                document.cookie="radioID=" + id[1] + ";"+ expires;
-                                document.cookie="radioName=" + radioNaam + ";" + expires;
-                                window.location = 'index.html';
-                                console.log(document.cookie);
-                                }
-                                })
-                                return;
-                                }
-                                else (json.result == "name " + radioNaam + " is invalid")
-                                {
-                                bootstrap_alert.warning('This radio was not found');
-                                return;
-                                }
-                                }
-                                }
-                                )}
-                                function register(){
-                                var radioRegID = document.getElementById('regID').value;
-                                var radioRegNaam = document.getElementById('regName').value;
-                                console.log("Im in register");
-                                var d = new Date();
-                                d.setTime(d.getTime()+(14*24*60*60*1000));
-                                var expires = "expires="+d.toGMTString();
-                                $.ajax({
-                                url: '/cgi-bin/register.php?q=setname&name=' + radioRegNaam + '&id=' + radioRegID,
-                                dataType: 'json',
-                                success: function(response) {
-                                json = response;
-                                console.log(json);
-                                if (json.result == 'ID ' + radioRegID + ' linked to ' + radioRegNaam)
-                                {
-                                $('#myModal').modal('hide');
-                                document.cookie="radioID=" + radioRegID + ";"+ expires;
-                                document.cookie="radioName=" + radioRegNaam + ";" + expires;
-                                window.location = 'index.html';
-                                console.log(document.cookie);
-                                return;
-                                }
-                                }
-                                }
-                                )}
-                                
-                                </script>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Core Scripts - Include with every page -->
+            <script src="js/comfycorp.js"></script>
             <script src="js/jquery-1.11.0.js"></script>
             <script src="js/bootstrap.min.js"></script>
             <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
