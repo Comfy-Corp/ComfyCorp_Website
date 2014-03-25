@@ -82,6 +82,7 @@ function populateSavedStreams(select, data) //Populate Streams
         dataType: 'json',
         success: function(response)
         {
+            //Checking json en items
             var json = response;
             var items = [];
             $.each(data, function(id, option) 
