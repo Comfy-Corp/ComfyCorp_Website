@@ -103,7 +103,7 @@ function populateSavedStreams(select, data) //Populate Streams
 
 function populateHeader(select) //Populate Header dashboard
 {
-    select.innerHTML = "Dashboard van " + getCookie('radioName');
+    select.innerHTML = "Dashboard of " + getCookie('radioName');
 }
 
 function populateSavedAlarms(select, data) //populate Alarms
