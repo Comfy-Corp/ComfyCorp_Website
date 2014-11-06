@@ -60,7 +60,7 @@ function getJsonFile() //Get the json file with info about streams alarms
     var json;
     $.ajax(
     {
-        url: '/cgi-bin/api.php',
+        url: 'https://reupload.nl/radio/cgi-bin/api.php',
         dataType: 'json',
         success: function(response)
         {
@@ -78,7 +78,7 @@ function populateSavedStreams(select, data) //Populate Streams
     var json;
     $.ajax(
     {
-        url: '/cgi-bin/api.php?q=getcurrent',
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=populate',
         dataType: 'json',
         success: function(response)
         {
@@ -122,7 +122,7 @@ function startstream() //Start a stream from the website
     var newStreamRadioID = getCookie("radioID");
     $.ajax(
     {
-        url: '/cgi-bin/api.php?q=genconfig&name=' + newStreamName + '&id=' + newStreamRadioID,
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=genconfig&name=' + newStreamName + '&id=' + newStreamRadioID,
         dataType: 'json',
         success: function(response)
         {
@@ -148,7 +148,7 @@ function stopstream() //Stop a stream from the website
     var newStreamRadioID = getCookie("radioID");
     $.ajax(
     {
-        url: '/cgi-bin/api.php?q=genconfigstop',
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=genconfigstop',
         dataType: 'json',
         success: function(response)
         {
@@ -173,7 +173,7 @@ function getcurrent() //Get current playing for the now playing
     var json;
     $.ajax(
     {
-        url: '/cgi-bin/api.php?q=getcurrent',
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=getcurrent',
         dataType: 'json',
         success: function(response)
         {
@@ -197,7 +197,7 @@ function saveStream() //Save added Stream
     var newStreamRadioID = getCookie("radioID");
     $.ajax(
     {
-        url: '/cgi-bin/api.php?q=addstream&name=' + newStreamName + '&url=' + newStreamURL + '&id=' + newStreamRadioID,
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=addstream&name=' + newStreamName + '&url=' + newStreamURL + '&id=' + newStreamRadioID,
         dataType: 'json',
         success: function(response)
         {
@@ -220,7 +220,7 @@ function saveAlarm() //Save added Alarm
     var newStreamRadioID = getCookie("radioID");
     $.ajax(
     {
-        url: '/cgi-bin/api.php?q=addalarm&id=' + newStreamRadioID + '&time=' + newAlarmTime + '&type=' + newAlarmType + '&stream=' + newAlarmStream + '&desc=' + newAlarmDesc,
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=addalarm&id=' + newStreamRadioID + '&time=' + newAlarmTime + '&type=' + newAlarmType + '&stream=' + newAlarmStream + '&desc=' + newAlarmDesc,
         dataType: 'json',
         success: function(response)
         {
@@ -263,7 +263,7 @@ function register()
     var expires = "expires=" + d.toGMTString();
     $.ajax(
     {
-        url: '/cgi-bin/register.php?q=setname&name=' + radioRegNaam + '&id=' + radioRegID,
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=setname&name=' + radioRegNaam + '&id=' + radioRegID,
         dataType: 'json',
         success: function(response)
         {
@@ -296,7 +296,7 @@ function logincheck()
     };
     $.ajax(
     {
-        url: '/cgi-bin/api.php?q=validate&name=' + radioNaam,
+        url: 'https://reupload.nl/radio/cgi-bin/api.php?q=validate&name=' + radioNaam,
         dataType: 'json',
         success: function(response)
         {
@@ -305,7 +305,7 @@ function logincheck()
             {
                 $.ajax(
                 {
-                    url: '/cgi-bin/api.php?q=getid&name=' + radioNaam,
+                    url: 'https://reupload.nl/radio/cgi-bin/api.php?q=getid&name=' + radioNaam,
                     dataType: 'json',
                     success: function(response)
                     {

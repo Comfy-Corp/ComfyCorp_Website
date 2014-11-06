@@ -89,6 +89,15 @@ function getRadios($con)
 
 function addStream($url, $name, $con)
 {
+			$stop = strpos($url, ":",6);
+			if (substr_count($url, "https:/") > 0)
+				$bareurl = substr($url, 8, $stop-8);
+			else
+				$bareurl = substr($url, 7, $stop-7);
+			$ip = gethostbyname($bareurl);
+			//echo $ip;
+		$url = str_replace($bareurl, $ip, $url);
+		//echo $url;
     $query = "INSERT INTO streams43 (URL, NAME) VALUES ('".$url."', '".$name."')";
     $result = mysqli_query($con,$query);
     return $result;
@@ -185,16 +194,23 @@ else
                 fclose($handle);
                 // preg_replace( "/\r|\n/", "", $data);
                 $str = explode("StreamAddr:", $data);
-                var_dump($str);
-                
-                $query = "SELECT * FROM streams43 WHERE URL='".$str[1]."'";
+                //var_dump($str);
+                $query = "SELECT * FROM streams43 WHERE URL='".substr($str[1], 0, -2)."'";
                 $result = mysqli_query($con, $query);
                 $strs = mysqli_fetch_array($result);
-                echo $result;
-                var_dump($strs);
-                echo $strs['NAME'];
-                //echo split(":", $data)[1];
+                //echo $query;
+                //var_dump($strs);
+                //echo $str[1][-1];
+                if (!$strs['NAME'] == NULL)
+                	echo "{\"result\":\"".$strs['NAME']."\"}";
+                else echo "{\"result\":\"\"}";
+                //echo split(":", $data)[1];*/
+                
                 break;
+                
+            case 'populate':
+            	echo json_encode(getStreams($con));
+            	break;
 
             case 'getid':
                 if (isValidRadioName($_GET["name"], $con))
@@ -237,26 +253,26 @@ else
                 else
                     echo "{\"error\":\"Invalid parameters\"}";
                 break;
-			case 'addalarm':
-				if ($_GET['id'] != "" && $_GET['time'] != "" && $_GET['stream'] != "" && $_GET["type"] != "" && $_GET["desc"] != "")
-				{
-					if (checkId($_GET['id'], $con))
-                    {
-                        $s = addAlarm($_GET['id'], $_GET['time'], $_GET['stream'], $_GET['type'],  $_GET['desc'], $con);
-						if ($s > 0)
-                        {
-                            echo "{\"result\":\"success\"}";
-                        }
-                        else
-                            die($s."shit");
-						
-                    }
-                    else
-                       echo "{\"error\":\"Invalid ID\"}"; 
-				}
-                else
-                    echo "{\"error\":\"Invalid parameters\"}";
-                break;     
+						case 'addalarm':
+							if ($_GET['id'] != "" && $_GET['time'] != "" && $_GET['stream'] != "" && $_GET["type"] != "" && $_GET["desc"] != "")
+							{
+								if (checkId($_GET['id'], $con))
+			                    {
+			                        $s = addAlarm($_GET['id'], $_GET['time'], $_GET['stream'], $_GET['type'],  $_GET['desc'], $con);
+									if ($s > 0)
+			                        {
+			                            echo "{\"result\":\"success\"}";
+			                        }
+			                        else
+			                            die($s."shit");
+									
+			                    }
+			                    else
+			                       echo "{\"error\":\"Invalid ID\"}"; 
+							}
+			                else
+			                    echo "{\"error\":\"Invalid parameters\"}";
+			                break;     
 
             case genconfig:
                 if ($_GET['name'] != "")
@@ -284,65 +300,66 @@ else
                     echo "{\"result\":\"success\"}";
                     break;
 
-	    case getstreamurl:
-		if ($_GET['id'] != "" && $_GET['time'] != "")
-		{ 
-            $alarmQuery = "SELECT * FROM alarm";
-            $alarmResult = mysqli_query($con, $alarmQuery); 
-            $clocktime = $_GET['time'];
-            $clocknumbers = explode(":", $clocktime);
-            $clocknumber = $clocknumbers[0].$clocknumbers[1];
-            $rows = array();
-            $times = array();
-            $late = array();
-            while ($row = mysqli_fetch_array($alarmResult)) 
-            {
-                $rows[] = $row;
-            }
+	    			case getstreamurl:
 
-            foreach ($rows as &$value) 
-            {   
-
-                $numbers = explode(":", $value[1]);
-                $tempvar = $numbers[0].$numbers[1];
-                if ($tempvar > $clocknumber) 
-                {
-                    $times[] = $value;
-                }
-                else
-                {
-                    $late[] = $value;
-                }
-            }
-            if (count($times) == 0) 
-            {
-                sort($late);
-                $handle = fopen("../alarms", "w+");
-                $data = "Type:ALARMREQ\nAlarmAmount:1\nAlarmTextA:".$late[0][4]."\nAlarmStreamIDA:".$late[0][3]."\nAlarmTypeA:0\nAlarmTimeA:".$late[0][1]."\nend\n\n";
-                fwrite($handle, $data);
-                fclose($handle);
-                $query = "SELECT * FROM streams43 WHERE ID=".$_GET['id'];
-                $result = mysqli_query($con, $query);
-                $str = mysqli_fetch_array($result);
-                echo "StreamURL:".$str['URL']."\n\n";
-                break;
-            }
-            sort($times);
-                $handle = fopen("../alarms", "w+");
-                $data = "Type:ALARMREQ\nAlarmAmount:1\nAlarmTextA:".$times[0][4]."\nAlarmStreamIDA:".$times[0][3]."\nAlarmTypeA:0\nAlarmTimeA:".$times[0][1]."\nend\n\n";
-                fwrite($handle, $data);
-                fclose($handle);
-            //echo '<pre>';
-            //print_r($times);
-		    $query = "SELECT * FROM streams43 WHERE ID=".$_GET['id'];
-            $result = mysqli_query($con, $query);
-            $str = mysqli_fetch_array($result);
-            echo "StreamURL:".$str['URL']."\n\n";
-            break;
-		}
-		else
-		    echo "URL:NONE";
-		break;
+								if ($_GET['id'] != "" && $_GET['time'] != "")
+								{ 
+						            $alarmQuery = "SELECT * FROM alarm";
+						            $alarmResult = mysqli_query($con, $alarmQuery); 
+						            $clocktime = $_GET['time'];
+						            $clocknumbers = explode(":", $clocktime);
+						            $clocknumber = $clocknumbers[0].$clocknumbers[1];
+						            $rows = array();
+						            $times = array();
+						            $late = array();
+						            while ($row = mysqli_fetch_array($alarmResult)) 
+						            {
+						                $rows[] = $row;
+						            }
+						
+						            foreach ($rows as &$value) 
+						            {   
+						
+						                $numbers = explode(":", $value[1]);
+						                $tempvar = $numbers[0].$numbers[1];
+						                if ($tempvar > $clocknumber) 
+						                {
+						                    $times[] = $value;
+						                }
+						                else
+						                {
+						                    $late[] = $value;
+						                }
+						            }
+						            if (count($times) == 0) 
+						            {
+						                sort($late);
+						                $handle = fopen("../alarms", "w+");
+						                $data = "Type:ALARMREQ\nAlarmAmount:1\nAlarmTextA:".$late[0][4]."\nAlarmStreamIDA:".$late[0][3]."\nAlarmTypeA:0\nAlarmTimeA:".$late[0][1]."\nend\n\n";
+						                fwrite($handle, $data);
+						                fclose($handle);
+						                $query = "SELECT * FROM streams43 WHERE ID=".$_GET['id'];
+						                $result = mysqli_query($con, $query);
+						                $str = mysqli_fetch_array($result);
+						                echo "StreamURL:".$str['URL']."\n\n";
+						                break;
+						            }
+						            sort($times);
+						                $handle = fopen("../alarms", "w+");
+						                $data = "Type:ALARMREQ\nAlarmAmount:1\nAlarmTextA:".$times[0][4]."\nAlarmStreamIDA:".$times[0][3]."\nAlarmTypeA:0\nAlarmTimeA:".$times[0][1]."\nend\n\n";
+						                fwrite($handle, $data);
+						                fclose($handle);
+						            //echo '<pre>';
+						            //print_r($times);
+								    $query = "SELECT * FROM streams43 WHERE ID=".$_GET['id'];
+						            $result = mysqli_query($con, $query);
+						            $str = mysqli_fetch_array($result);
+						            echo "StreamURL:".$str['URL']."\n\n";
+						            break;
+								}
+								else
+								    echo "URL:NONE";
+								break;
 
             default:
                 echo "{\"error\":\"Invalid query\"}";
