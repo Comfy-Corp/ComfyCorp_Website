@@ -1,6 +1,6 @@
 -- phpMyAdmin SQL Dump
 -- version 4.2.11
--- http://www.phpmyadmin.net
+-- https://www.phpmyadmin.net
 --
 -- Host: localhost
 -- Generation Time: Nov 06, 2014 at 03:20 PM
@@ -76,10 +76,10 @@ CREATE TABLE IF NOT EXISTS `streams43` (
 --
 
 INSERT INTO `streams43` (`NAME`, `ID`, `URL`) VALUES
-('Celtic Music Radio', 23, 'http://195.10.228.6:8000/celticmusic.mp3'),
-('Radio Nostalgie', 24, 'http://84.16.67.203/nostalgiewhatafeeling-128.mp3'),
-('Kiss FM Ukraine ', 25, 'http://195.95.206.14:8000/kiss'),
-('Rainwave ', 26, 'http://108.178.51.210:8000/all.mp3?26735:OuANWgvoAD');
+('Celtic Music Radio', 23, 'https://195.10.228.6:8000/celticmusic.mp3'),
+('Radio Nostalgie', 24, 'https://84.16.67.203/nostalgiewhatafeeling-128.mp3'),
+('Kiss FM Ukraine ', 25, 'https://195.95.206.14:8000/kiss'),
+('Rainwave ', 26, 'https://108.178.51.210:8000/all.mp3?26735:OuANWgvoAD');
 
 --
 -- Indexes for dumped tables

@@ -87,7 +87,7 @@
         },
 
 
-// refer http://ta.wikipedia.org/s/1er1      
+// refer https://ta.wikipedia.org/s/1er1      
 
         meridiem : function (hour, minute, isLower) {
             if (hour >= 6 && hour <= 10) {

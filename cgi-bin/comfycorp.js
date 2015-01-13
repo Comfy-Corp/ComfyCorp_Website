@@ -7,16 +7,11 @@ Company: ComfyCorp (Avans Hogeschool - Breda - Netherlands)
 From here is the part for Index
 */
 
-var editingAlarm = 0;
-
 function load() // Called when page is loaded, will call the next files
 {
     checkCookie();
     getcurrent();
     getJsonFile();
-    $('#remove-btn-alarm').hide();
-    $('#update-btn-alarm').hide();
-
 }
 
 function refresh() // Called in a loop when page is loaded.
@@ -62,7 +57,6 @@ function deletecookie() //Delete Cookie on logout
 
 function getJsonFile() //Get the json file with info about streams alarms
 {
-    var selectedStream = document.getElementById('streamselect').value;
     var json;
     $.ajax(
     {
@@ -72,7 +66,7 @@ function getJsonFile() //Get the json file with info about streams alarms
         {
             json = response;
             populateSavedStreams(document.getElementById('streamselect'), json.streams);
-            populateSavedStreamsAlarm(document.getElementById('streamselect2'), json.streams);
+            populateSavedStreams(document.getElementById('streamselect2'), json.streams);
             populateSavedAlarms(document.getElementById('alarmselect'), json.alarms);
             populateHeader(document.getElementById('header'));
         }
@@ -93,9 +87,9 @@ function populateSavedStreams(select, data) //Populate Streams
             var items = [];
             $.each(data, function(id, option) 
             { 
-                if (option.id == document.getElementById('streamselect').value)
-                { //Selected option if it was selected before
-                    items.push('<option value="' + option.id + '" alt="' + option.url + '" selected>' + option.name + '<\/option>');
+                if (json.result === option.name)
+                { //Selected option if its playing
+                    items.push('<option selected value="' + option.id + '" alt="' + option.url + '">' + option.name + '<\/option>');
                 }
                 else
                 {
@@ -107,34 +101,6 @@ function populateSavedStreams(select, data) //Populate Streams
     });
 }
 
-
-function populateSavedStreamsAlarm(select, data) //Populate Streams
-{
-    var json;
-    $.ajax(
-    {
-        url: 'http://188.166.22.194/cgi-bin/api.php?q=populate',
-        dataType: 'json',
-        success: function(response)
-        {
-            //Checking json en items
-            var json = response;
-            var items = [];
-            $.each(data, function(id, option) 
-            { 
-                if (option.id == document.getElementById('streamselect2').value)
-                { //Selected option if it was selected before
-                    items.push('<option value="' + option.id + '" alt="' + option.url + '" selected>' + option.name + '<\/option>');
-                }
-                else
-                {
-                    items.push('<option value="' + option.id + '" alt="' + option.url + '">' + option.name + '<\/option>');
-                }
-            });
-            select.innerHTML = items.join('');
-        }
-    });
-}
 function populateHeader(select) //Populate Header dashboard
 {
     select.innerHTML = "Dashboard of " + getCookie('radioName');
@@ -142,18 +108,10 @@ function populateHeader(select) //Populate Header dashboard
 
 function populateSavedAlarms(select, data) //populate Alarms
 {
-    var now = Date.now();
-    console.debug("Now: " +now);
     var items = [];
     $.each(data, function(id, option)
     {
-        if (moment(option.time)<now) {
-        items.push('<a href="#" class="list-group-item list-group-item-warning" onclick="editalarm(\'' + option.desc + '\', \'' + option.time +'\')""><i class="fa fa-bell fa-fw"><\/i> ' + option.desc + '<\/br><span class="text-muted small"><em>' + option.time + '<\/em><\/span><\/a>');
-        }
-        else
-        {
-            items.push('<a href="#" class="list-group-item" onclick="editalarm(\'' + option.desc + '\', \'' + option.time +'\')""><i class="fa fa-bell fa-fw"><\/i> ' + option.desc + '<\/br><span class="text-muted small"><em>' + option.time + '<\/em><\/span><\/a>');
-        }
+        items.push('<a class="list-group-item" onclick="removealarm(' + option.desc + ' ' + option.time +')"><i class="fa fa-bell fa-fw"><\/i> ' + option.desc + '<\/br><span class="text-muted small"><em>' + option.time + '<\/em><\/span><\/a>');
     });
     select.innerHTML = items.join('');
 }
@@ -211,43 +169,14 @@ function stopstream() //Stop a stream from the website
 }
 
 
-
-
 // 
-function editalarm(desc, time) //Removes an alarm from the database
+function removealarm(desc, time) //Removes an alarm from the database
 {
     var newStreamRadioID = getCookie("radioID");
     $.ajax(
     {
-        url: 'http://188.166.22.194/cgi-bin/api.php?q=1alarm&desc=' + desc + '&time=' + time,
-        dataType: 'json',
-        success: function(response)
-        {
-            //Checking json en items
-            var json = response;
-            document.getElementById('timeAlarm').value = response.ALARM_TIME;
-            document.getElementById('newAlarmDesc').value = response.DESCRIPTION;
-            document.getElementById('streamselect2').value = response.STREAM;
-            editingAlarm = response.ALARM_ID;
-            $('#addAlarm').modal('show');
-            $('#remove-btn-alarm').show();
-            $('#update-btn-alarm').show();
-            $('#add-btn-alarm').hide();
-
-        }
-    });
-}
-
-function removealarm() //Removes an alarm from the database
-{
-    var newStreamRadioID = getCookie("radioID");
-    var time = document.getElementById('timeAlarm').value;
-    var desc = document.getElementById('newAlarmDesc').value;
-    var sss;
-    sss = 'http://188.166.22.194/cgi-bin/api.php?q=removealarm&desc=' + desc + '&time=' + time;
-    console.debug(sss);
-    $.ajax(
-    {
+        var string = 'http://188.166.22.194/cgi-bin/api.php?q=removealarm&desc=' + desc + '&time=' + time;
+        console.debug(string);
         url: 'http://188.166.22.194/cgi-bin/api.php?q=removealarm&desc=' + desc + '&time=' + time,
         dataType: 'json',
         success: function(response)
@@ -266,16 +195,6 @@ function removealarm() //Removes an alarm from the database
             }
         }
     });
-}
-
-function hideupdatebuttons()
-{
-    $('#remove-btn-alarm').hide();
-    $('#update-btn-alarm').hide();
-    $('#add-btn-alarm').show();
-    document.getElementById('timeAlarm').value = null;
-    document.getElementById('newAlarmDesc').value = null;
-
 }
 
 function getcurrent() //Get current playing for the now playing
@@ -300,24 +219,23 @@ function getcurrent() //Get current playing for the now playing
     });
 }
 
-
 function saveStream() //Save added Stream
 {
     var newStreamName = document.getElementById('newStreamName').value;
     var newStreamURL = document.getElementById('newStreamURL').value;
-        var newStreamRadioID = getCookie("radioID");
-        $.ajax(
+    var newStreamRadioID = getCookie("radioID");
+    $.ajax(
+    {
+        url: 'http://188.166.22.194/cgi-bin/api.php?q=addstream&name=' + newStreamName + '&url=' + newStreamURL + '&id=' + newStreamRadioID,
+        dataType: 'json',
+        success: function(response)
         {
-            url: 'http://188.166.22.194/cgi-bin/api.php?q=addstream&name=' + newStreamName + '&url=' + newStreamURL + '&id=' + newStreamRadioID,
-            dataType: 'json',
-            success: function(response)
-            {
-                json = response;
-                $('#myModal').modal('hide');
-                getJsonFile();
-                populateSavedStreams(document.getElementById('streamselect'), json.streams);
-            }
-        });
+            json = response;
+            $('#myModal').modal('hide');
+            getJsonFile();
+            populateSavedStreams(document.getElementById('streamselect'), json.streams);
+        }
+    });
 }
 
 function saveAlarm() //Save added Alarm
@@ -328,12 +246,6 @@ function saveAlarm() //Save added Alarm
     newAlarmType = 0;
     newAlarmTime = document.getElementById('timeAlarm').value;
     var newAlarmDesc = document.getElementById('newAlarmDesc').value;
-        if (newAlarmTime == "" || newAlarmDesc == "") {
-        bootstrap_alert.warning('Warning: I think you forgot something.');
-        window.setTimeout(closealert, 5000);
-        $('#addAlarm').modal('hide');
-    }
-    else{
     var newStreamRadioID = getCookie("radioID");
     $.ajax(
     {
@@ -341,47 +253,10 @@ function saveAlarm() //Save added Alarm
         dataType: 'json',
         success: function(response)
         {
-            bootstrap_alert.success('Success: Alarm saved');
-            window.setTimeout(closealert, 5000);
             json = response;
             $('#addAlarm').modal('hide');
             getJsonFile();
             populateSavedAlarms(document.getElementById('alarmselect'), json.alarms);
-            refresh();
-        }
-    });
-}
-}
-
-function updateAlarm() //Save added Alarm
-{
-    var newStreamRadioID = getCookie("radioID");
-    var time = document.getElementById('timeAlarm').value;
-    var desc = document.getElementById('newAlarmDesc').value;
-    var newAlarmStream = document.getElementById('streamselect2').value;
-    console.debug("newAlarmStream" + newAlarmStream);
-    var sss = 'http://188.166.22.194/cgi-bin/api.php?q=updatealarm&alarmID=' + editingAlarm + '&newdesc=' + desc + '&newtime=' + time + '&newstream=' + newAlarmStream;
-    console.debug(sss);
-    $.ajax(
-    {
-        url: 'http://188.166.22.194/cgi-bin/api.php?q=updatealarm&alarmID=' + editingAlarm + '&newdesc=' + desc + '&newtime=' + time + '&newstream=' + newAlarmStream,
-        dataType: 'json',
-        success: function(response)
-        {
-            json = response;
-            if (json.result == 'success')
-            {
-                $('#addAlarm').modal('hide');
-                bootstrap_alert.success('Success: Alarm changed');
-                window.setTimeout(closealert, 5000);
-                refresh();
-            }
-            else
-            {
-                $('#addAlarm').modal('hide');
-                bootstrap_alert.warning('Error: Er is een fout opgetreden (Error code: 42)');
-                window.setTimeout(closealert, 5000);
-            }
         }
     });
 }

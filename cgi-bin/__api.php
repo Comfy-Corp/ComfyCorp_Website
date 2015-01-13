@@ -65,7 +65,7 @@ function getStreams($con)
 function getAlarms($con)
 {
     #parsing alarms
-    $result = mysqli_query($con,"SELECT * FROM `alarm` ORDER BY `ALARM_TIME` ASC");
+    $result = mysqli_query($con,"SELECT * FROM alarm");
     $a = array();
     while($row = mysqli_fetch_array($result))
     {
@@ -73,13 +73,6 @@ function getAlarms($con)
     }
 
     return $a;
-}
-
-function getAlarm($desc, $time, $con)
-{
-    #parsing alarms
-    $result = mysqli_query($con,"SELECT * FROM alarm WHERE `DESCRIPTION`='".$desc."' AND `TIME`='".$time."'");
-    return $result;
 }
 
 function getRadios($con)
@@ -121,24 +114,13 @@ function removeAlarm($desc, $time, $con)
 {
     // DELETE FROM `alarm` WHERE `ALARM_ID`=2
     $timeWithoutSpace = str_replace ( "%20" , " " , $time );
+    echo "Time: $time";
+    echo "Time Without Space: $timeWithoutSpace";
     $query = "SELECT `ALARM_ID` FROM `alarm` WHERE `DESCRIPTION`='".$desc."' AND `ALARM_TIME`='".$time."'";
     $result = mysqli_query($con,$query);
-    $strs = mysqli_fetch_array($result);
-    $alarmID = $strs['ALARM_ID'];
-    $query = "DELETE FROM `alarm` WHERE `ALARM_ID`='".$alarmID."'";
-    $result = mysqli_query($con,$query);
+    var_dump($result);
     return $result;
 }
-
-
-function updateAlarm($alarmID, $newdesc, $newtime, $newstream, $con)
-{
-    $timeWithoutSpace = str_replace ( "%20" , " " , $newtime );
-    $query = "UPDATE `alarm` SET `DESCRIPTION` = '".$newdesc."', `ALARM_TIME` = '".$timeWithoutSpace."', `STREAM` = '".$newstream."' WHERE `ALARM_ID` = '".$alarmID."'";
-    $result = mysqli_query($con,$query);
-    return $result;
-}
-
 function checkId($id, $con)
 {
     if ($id === "")
@@ -184,30 +166,21 @@ if (mysqli_connect_errno())
 {
 	//echo "Failed to connect to MySQL: " . mysqli_connect_error();
     echo "{\"Error\":\"MySql connection failed\"}";
-}
+
 else
 {
+    echo "Hello";
     #$e = new jsonstruct($r, $s, $a);
     if ($_GET["q"]!=null)
     {
         switch ($_GET["q"]) {
-                // echo "$_GET["q"]";
+
             #case 'radio':
             #   echo json_encode(getRadios($con));
             #    break;
             
             case 'alarm':
                 echo json_encode(getAlarms($con));
-                break;
-
-            case '1alarm':
-                if($_GET['desc'] != "" && $_GET['time'] != "")
-                {
-                $query = "SELECT * FROM alarm WHERE `DESCRIPTION`='".$_GET['desc']."' AND `ALARM_TIME`='".$_GET['time']."'";
-                $result = mysqli_query($con, $query);
-                $strs = mysqli_fetch_array($result);
-                echo json_encode($strs);
-                }
                 break;
 
             case 'stream':
@@ -243,26 +216,6 @@ else
                 //echo $str[1][-1];
                 if (!$strs['NAME'] == NULL)
                 	echo "{\"result\":\"".$strs['NAME']."\"}";
-                else echo "{\"result\":\"\"}";
-                //echo split(":", $data)[1];*/
-                
-                break;
-
-            case 'getcurrentid':
-                $handle = fopen("../settings", "r");
-                $data = fread($handle, filesize("../settings"));
-                fclose($handle);
-                // preg_replace( "/\r|\n/", "", $data);
-                $str = explode("StreamAddr:", $data);
-                //var_dump($str);
-                $query = "SELECT * FROM streams43 WHERE URL='".substr($str[1], 0, -2)."'";
-                $result = mysqli_query($con, $query);
-                $strs = mysqli_fetch_array($result);
-                //echo $query;
-                //var_dump($strs);
-                //echo $str[1][-1];
-                if (!$strs['ID'] == NULL)
-                    echo "{\"result\":\"".$strs['ID']."\"}";
                 else echo "{\"result\":\"\"}";
                 //echo split(":", $data)[1];*/
                 
@@ -335,36 +288,21 @@ else
                     echo "{\"error\":\"Invalid parameters\"}";
                 break;    
 
-            case 'removealarm':
-                if ($_GET['time'] != "" && $_GET["desc"] != "")
-                {
+            // case 'removealarm':
+            //     if ($_GET['time'] != "" && $_GET["desc"] != "")
+            //     {
 
-                        $s = removeAlarm($_GET['desc'],$_GET['time'], $con);
-                        if ($s > 0)
-                        {
-                            echo "{\"result\":\"success\"}";
-                        }
-                        else
-                            die($s."shit");
-                }
-                else
-                    echo "{\"error\":\"Invalid parameters\"}";
-                break;     
-            case 'updatealarm':
-                if ($_GET["alarmID"] != "" && $_GET["newdesc"] != "" && $_GET["newtime"] != "" && $_GET["newstream"] != "")
-                {
-
-                        $s = updateAlarm($_GET["alarmID"], $_GET["newdesc"],$_GET["newtime"],$_GET["newstream"], $con);
-                        if ($s > 0)
-                        {
-                            echo "{\"result\":\"success\"}";
-                        }
-                        else
-                            die($s."shit");
-                }
-                else
-                    echo "{\"error\":\"Invalid parameters\"}";
-                break;  
+            //             $s = removeAlarm($_GET['desc'],$_GET['time'], $con);
+            //             if ($s > 0)
+            //             {
+            //                 echo "{\"result\":\"success\"}";
+            //             }
+            //             else
+            //                 die($s."shit");
+            //     }
+            //     else
+            //         echo "{\"error\":\"Invalid parameters\"}";
+            //     break;     
 
             case genconfig:
                 if ($_GET['name'] != "")

@@ -23,7 +23,7 @@
     <script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script><!-- Page-Level Plugin Scripts - Dashboard -->
     <script>
-    setInterval(refresh,60000); //Please edit this! <===== !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    setInterval(refresh,2000); //Please edit this! <===== !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
     </script>
     <script src="js/sb-admin.js"></script>
 </head>
@@ -37,8 +37,8 @@
                 "sr-only">Toggle navigation</span><span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span></button> <a class=
-                "navbar-brand" href="index.html" id="brandID"><img width="40" height="40" src=
-                        "https://reupload.nl/radio/pics/ComfyCorpLogoConcept.png"><b>omfy Radio</b></a>
+                "navbar-brand" href="index.php" id="brandID"><img width="40" height="40" src=
+                        "http://188.166.22.194/pics/ComfyCorpLogoConcept.png"><b>omfy Radio</b></a>
             </div><!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
@@ -85,7 +85,7 @@
                                 <div class="modal-body">
                                     <div class="container">
                                         <div class="col-lg-4">
-                                            <center><h1>The Comfy Hero!</h1></br><img src="https://reupload.nl/radio/pics/hero.png"></center>
+                                            <center><h1>The Comfy Hero!</h1></br><img src="http://188.166.22.194/pics/hero.png"></center>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                 <ul class="nav" id="side-menu">
                     <li class="sidebar-search">
                         <div class="input-group custom-search-form"><img src=
-                        "https://reupload.nl/radio/pics/logo.png"></div><!-- /input-group -->
+                        "http://188.166.22.194/pics/logo.png"></div><!-- /input-group -->
                     </li>
 
                     <li><a href="index.html"><i class="ionicons ion-speedometer"> Dashboard</i></a></li>
@@ -224,7 +224,7 @@
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-xs"
                                     data-target="#addAlarm" data-toggle="modal"
-                                    href="#"><i class="fa fa-plus"></i> Add</a>
+                                    href="#" onclick="hideupdatebuttons()"><i class="fa fa-plus"></i> Add</a>
                                 </div><!-- Modal -->
 
                                 <div class="modal fade" id="addAlarm" tabindex=
@@ -253,8 +253,7 @@
                                                                 id=
                                                                 'datetimepicker1'>
                                                                 <input id="timeAlarm" placeholder="Time" class="form-control"
-                                                                    type=
-                                                                    'text'>
+                                                                    type='text'>
                                                                 <span class="input-group-addon"><span class="fa fa-clock-o"></span>
 																</span>
                                                                 </div>
@@ -273,8 +272,8 @@
                                                             {
                                                                 $('#datetimepicker1').datetimepicker(
                                                                 {
-                                                                    format: 'HH:mm',
-                                                                    pickDate: false,
+                                                                    format: 'YYYY-MM-DD HH:mm:ss',
+                                                                    pickDate: true,
                                                                     pickSeconds: false,
                                                                     pick12HourFormat: false  
                                                                 });
@@ -285,8 +284,10 @@
                                             </div>
 
                                             <div class="modal-footer">
+                                                <button class="btn btn-danger" data-dismiss="modal" id="remove-btn-alarm" onclick="removealarm()" type="button">Remove</button>
                                                 <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-                                                <button onclick="saveAlarm()" class="btn btn-primary" type="button">Save changes</button>
+                                                <button onclick="saveAlarm()" class="btn btn-primary" type="button" id="add-btn-alarm">Save alarm</button>
+                                                <button onclick="updateAlarm()" class="btn btn-primary" type="button" id="update-btn-alarm">Save changes</button>
                                             </div>
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->

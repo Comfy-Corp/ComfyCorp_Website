@@ -2461,7 +2461,7 @@
 // moment.js language configuration
 // language : Bahasa Indonesia (id)
 // author : Mohammad Satrio Utomo : https://github.com/tyok
-// reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
+// reference: https://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
@@ -5021,7 +5021,7 @@
         },
 
 
-// refer http://ta.wikipedia.org/s/1er1      
+// refer https://ta.wikipedia.org/s/1er1      
 
         meridiem : function (hour, minute, isLower) {
             if (hour >= 6 && hour <= 10) {

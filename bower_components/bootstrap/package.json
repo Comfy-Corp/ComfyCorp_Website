@@ -6,7 +6,7 @@
     "bootstrap",
     "css"
   ],
-  "homepage": "http://getbootstrap.com",
+  "homepage": "https://getbootstrap.com",
   "author": "Twitter, Inc.",
   "scripts": {
     "test": "grunt test"

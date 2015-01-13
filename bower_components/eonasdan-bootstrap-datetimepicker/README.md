@@ -1,15 +1,15 @@
 # Bootstrap v3 datetimepicker widget ![GitHub version](https://badge.fury.io/gh/Eonasdan%2Fbootstrap-datetimepicker.png)
 
-![DateTimePicker](http://i.imgur.com/nfnvh5g.png)
+![DateTimePicker](https://i.imgur.com/nfnvh5g.png)
 
-### [⇢ View the manual and demos](http://eonasdan.github.io/bootstrap-datetimepicker/)
+### [⇢ View the manual and demos](https://eonasdan.github.io/bootstrap-datetimepicker/)
 
 ##Where do you use this?
 I'd love to know if your public site is using this plugin and list your logo on the documentation site. Please email me `eonasdan at outlook dot com`
 
 ## Quick installation using
 
-## [bower](http://bower.io): ![Bower version](https://badge.fury.io/bo/eonasdan-bootstrap-datetimepicker.png)
+## [bower](https://bower.io): ![Bower version](https://badge.fury.io/bo/eonasdan-bootstrap-datetimepicker.png)
 
 Run the following command:
 ```
@@ -20,7 +20,7 @@ bower install eonasdan-bootstrap-datetimepicker#latest --save
 PM> Install-Package Bootstrap.v3.Datetimepicker
 ```
 
-## [Rails](http://rubyonrails.org/) ![Gem Version](https://badge.fury.io/rb/bootstrap3-datetimepicker-rails.png)
+## [Rails](https://rubyonrails.org/) ![Gem Version](https://badge.fury.io/rb/bootstrap3-datetimepicker-rails.png)
 
 Add the following to your `Gemfile`:
 ```
@@ -46,21 +46,21 @@ Include necessary scripts and styles:
 </head>
 ```
 
-Done! [Now take a look at the manual](http://eonasdan.github.io/bootstrap-datetimepicker/) for examples and available options.
+Done! [Now take a look at the manual](https://eonasdan.github.io/bootstrap-datetimepicker/) for examples and available options.
 
 
 
 ## Manual installation
 
 ### [Moment.js](https://github.com/moment/moment)
-Datetimepicker requires moment.js. This allows for better support for various date formats and locales. See [documentation](http://eonasdan.github.io/bootstrap-datetimepicker/) for examples. Check [Momentjs' homepage](http://momentjs.com/) for documentation on date formats. If you can't use moment.js there's still older version of datetimewidget [available here](https://github.com/Eonasdan/bootstrap-datetimepicker/tree/version1). 
+Datetimepicker requires moment.js. This allows for better support for various date formats and locales. See [documentation](https://eonasdan.github.io/bootstrap-datetimepicker/) for examples. Check [Momentjs' homepage](https://momentjs.com/) for documentation on date formats. If you can't use moment.js there's still older version of datetimewidget [available here](https://github.com/Eonasdan/bootstrap-datetimepicker/tree/version1). 
 
 ```html
 <script type="text/javascript" src="/path/to/moment.js"></script>
 ```
 
 ### Bootstrap 3 collapse and transition plugins
-Make sure to include *.JS files for plugins [collapse](http://getbootstrap.com/javascript/#collapse) and [transitions](http://getbootstrap.com/javascript/#transitions). They are included with [bootstrap in js/ directory](https://github.com/twbs/bootstrap/tree/master/js)
+Make sure to include *.JS files for plugins [collapse](https://getbootstrap.com/javascript/#collapse) and [transitions](https://getbootstrap.com/javascript/#transitions). They are included with [bootstrap in js/ directory](https://github.com/twbs/bootstrap/tree/master/js)
 
 ```html
 <script type="text/javascript" src="/path/to/bootstrap/js/transition.js"></script>
@@ -126,19 +126,19 @@ Finally include the main javascript file.
 * Fix for #62: Default format will properly validate time picker only.
 
 ## 2.1.5
-* Custom icons, such as Font Awesome, are now supported. (#49)  See [Example#9](http://eonasdan.github.io/bootstrap-datetimepicker/#example9)
+* Custom icons, such as Font Awesome, are now supported. (#49)  See [Example#9](https://eonasdan.github.io/bootstrap-datetimepicker/#example9)
 * If more then one `input-group-addon` is present use `datepickerbutton` to identify where the picker should popup from. (#48)
-* New Event: `error.dp`. Fires when Moment cannot parse the date or when the timepicker cannot change because of a `disabledDates` setting. Returns a Moment date object. The specific error can be found be using `invalidAt()`. For more information see [Moment's docs](http://momentjs.com/docs/#/parsing/is-valid/)
+* New Event: `error.dp`. Fires when Moment cannot parse the date or when the timepicker cannot change because of a `disabledDates` setting. Returns a Moment date object. The specific error can be found be using `invalidAt()`. For more information see [Moment's docs](https://momentjs.com/docs/#/parsing/is-valid/)
 * Fix for #42, plugin will now check for `A` or `a` in the format string to determine if the AM/PM selector should display.
 * Fix for #45, fixed null/empty and invalid dates
 * Fix for #46, fixed active date highlighting
 * Fix for #47, `change.dp` event to also include the previous date.
 
 ####2.0.1
-* New event `error.dp` fires when plugin cannot parse date or when increase/descreasing hours/minutes to a disabled date.  See [Example#7](http://eonasdan.github.io/bootstrap-datetimepicker/#example7)
+* New event `error.dp` fires when plugin cannot parse date or when increase/descreasing hours/minutes to a disabled date.  See [Example#7](https://eonasdan.github.io/bootstrap-datetimepicker/#example7)
 * Minor fixes
 
 ####2.0.0
-* `disabledDates` is now an option to set the disabled dates. It accepts date objects like `new Date("November 12, 2013 00:00:00")` and `12/25/2013' and `moment` date objects. See [Example#7](http://eonasdan.github.io/bootstrap-datetimepicker/#example7) for usage.
-* Events are easier to use; see [Example#8](http://eonasdan.github.io/bootstrap-datetimepicker/#example8)
+* `disabledDates` is now an option to set the disabled dates. It accepts date objects like `new Date("November 12, 2013 00:00:00")` and `12/25/2013' and `moment` date objects. See [Example#7](https://eonasdan.github.io/bootstrap-datetimepicker/#example7) for usage.
+* Events are easier to use; see [Example#8](https://eonasdan.github.io/bootstrap-datetimepicker/#example8)
 

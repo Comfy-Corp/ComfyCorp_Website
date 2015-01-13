@@ -1,6 +1,6 @@
 /*!
  * Bootstrap Grunt task for generating npm-shrinkwrap.canonical.json
- * http://getbootstrap.com
+ * https://getbootstrap.com
  * Copyright 2014 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */

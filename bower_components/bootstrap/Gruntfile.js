@@ -1,6 +1,6 @@
 /*!
  * Bootstrap's Gruntfile
- * http://getbootstrap.com
+ * https://getbootstrap.com
  * Copyright 2013-2014 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
@@ -343,7 +343,7 @@ module.exports = function (grunt) {
         options: {
           build: process.env.TRAVIS_JOB_ID,
           concurrency: 10,
-          urls: ['http://127.0.0.1:3000/js/tests/index.html'],
+          urls: ['https://127.0.0.1:3000/js/tests/index.html'],
           browsers: grunt.file.readYAML('test-infra/sauce_browsers.yml')
         }
       }
